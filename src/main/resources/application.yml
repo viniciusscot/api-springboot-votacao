@@ -1,0 +1,41 @@
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  main:
+    banner-mode: 'OFF'
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+  devtools:
+    restart:
+      enabled: true
+      additional-exclude: logs/**
+  jmx:
+    enabled: true
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI}
+
+management:
+  context-path: /actuator
+  endpoints:
+    web:
+      exposure:
+        include: env,health,info,refresh,metrics,heapdump,threaddump,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  app:
+    description: "Change this description"
+    name: '@name@'
+    groupId: '@project.groupId@'
+    artifactId: '@project.artifactId@'
+    version: '@project.version@'
+    spring-version: '@spring-boot.version@'
+    java-version: '@java.version@'
+
+services:
+  sicredi:
+    cpfGateway: https://user-info.herokuapp.com

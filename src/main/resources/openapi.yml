@@ -1,0 +1,452 @@
+openapi: 3.0.0
+info:
+  title: API Associate
+  description: Description API Associate
+  termsOfService: 'https://sample.com/terms/'
+  contact:
+    name: API Support
+    url: 'https://www.sample.com/support'
+    email: support@sample.com
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+  version: '1.0'
+servers:
+  - url: 'https://apps-dev.zevolution.com.br/sample'
+    description: Development server
+  - url: 'https://apps-hml.zevolution.com.br/sample'
+    description: Staging server
+  - url: 'https://apps-prd.zevolution.com.br/sample'
+    description: Production server
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        timestamp:
+          type: string
+        type:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
+        userMessage:
+          type: string
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemType'
+    ProblemType:
+      title: ProblemType
+      x-stoplight:
+        id: 5i5zn2x74x3mw
+      type: object
+      properties:
+        name:
+          type: string
+        userMessage:
+          type: string
+    AssociateResult:
+      type: object
+      x-examples:
+        example-1:
+          id: -2147483648
+          description: string
+      properties:
+        id:
+          type: string
+        cpf:
+          type: string
+    AssociateInput:
+      title: AssociateInput
+      x-stoplight:
+        id: 5siw9i2m7nz5h
+      type: object
+      properties:
+        cpf:
+          type: string
+          minLength: 1
+      required:
+        - cpf
+    SchedulleResult:
+      title: SchedulleResult
+      x-stoplight:
+        id: 7g772ummr4k7v
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    SchedulleInput:
+      title: SchedulleInput
+      x-stoplight:
+        id: lq4uvw2g3fkoi
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+      required:
+        - name
+    SessionInput:
+      title: SessionInput
+      x-stoplight:
+        id: 5f8i1lxuiygxf
+      type: object
+      description: ''
+      properties:
+        durationInMinutes:
+          type: integer
+          default: 1
+        schedulleId:
+          type: string
+          minLength: 1
+      required:
+        - schedulleId
+    SessionResult:
+      title: SessionResult
+      x-stoplight:
+        id: 4t9u1hhbbtu33
+      type: object
+      properties:
+        id:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        durationInMinutes:
+          type: string
+    ResultOfSchedulleResult:
+      title: ResultOfSchedulleResult
+      x-stoplight:
+        id: vzwvyjgo9rvtl
+      type: object
+      description: ''
+      properties:
+        session:
+          $ref: '#/components/schemas/SessionResult'
+        votes:
+          type: integer
+          format: int64
+        votesYes:
+          type: integer
+          format: int64
+        votesNo:
+          type: integer
+          format: int64
+        result:
+          type: string
+    VoteResult:
+      title: VoteResult
+      x-stoplight:
+        id: 3j8afd41vh09z
+      type: object
+      description: ''
+      properties:
+        horary:
+          type: string
+          format: date-time
+        decision:
+          type: boolean
+        associateId:
+          type: string
+        schedulleId:
+          type: string
+    VoteInput:
+      title: VoteInput
+      x-stoplight:
+        id: clgu7ixf8gqep
+      type: object
+      properties:
+        decision:
+          type: boolean
+        associateId:
+          type: string
+          minLength: 1
+        schedulleId:
+          type: string
+          minLength: 1
+      required:
+        - decision
+        - associateId
+        - schedulleId
+  responses:
+    Problem:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            example-1:
+              value:
+                code: 0
+                message: string
+    AssociateResult:
+      description: Associate
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AssociateResult'
+    SchedulleResult:
+      description: Schedulle
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SchedulleResult'
+    SessionResult:
+      description: Session
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SessionResult'
+    VoteResult:
+      description: Vote
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VoteResult'
+  requestBodies:
+    AssociateInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AssociateInput'
+    SchedulleInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SchedulleInput'
+    SessionInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SessionInput'
+    VoteInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VoteInput'
+paths:
+  /associates:
+    get:
+      summary: Find a associate by id
+      description: Find all associates
+      operationId: getAllAssociates
+      responses:
+        '200':
+          description: A list of associate
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssociateResult'
+        '500':
+          $ref: '#/components/responses/Problem'
+    parameters: []
+    post:
+      summary: Create a new associate
+      operationId: createAssociate
+      responses:
+        '201':
+          $ref: '#/components/responses/AssociateResult'
+        '500':
+          $ref: '#/components/responses/Problem'
+      description: Create a new associate
+      requestBody:
+        $ref: '#/components/requestBodies/AssociateInput'
+  '/associates/{associateId}':
+    get:
+      summary: Find a associate by id
+      description: Find a associate by id
+      operationId: getAssociate
+      responses:
+        '200':
+          $ref: '#/components/responses/AssociateResult'
+        '404':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+    parameters:
+      - schema:
+          type: string
+          format: int64
+        name: associateId
+        in: path
+        required: true
+    put:
+      summary: Update a associate by id
+      operationId: updateAssociate
+      responses:
+        '200':
+          $ref: '#/components/responses/AssociateResult'
+        '404':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+      requestBody:
+        $ref: '#/components/requestBodies/AssociateInput'
+      description: Update a associate by id
+    delete:
+      summary: Delete a associate by id
+      operationId: deleteAssociate
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+      description: Delete a associate by id
+  /schedulles:
+    get:
+      summary: Find all schedulles
+      description: Find all schedulles
+      operationId: getAllSchedulles
+      responses:
+        '200':
+          description: A list of associate
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SchedulleResult'
+        '500':
+          $ref: '#/components/responses/Problem'
+    parameters: []
+    post:
+      summary: Create a new schedulle
+      operationId: createSchedulle
+      responses:
+        '201':
+          $ref: '#/components/responses/SchedulleResult'
+        '500':
+          $ref: '#/components/responses/Problem'
+      description: Create a new schedulle
+      requestBody:
+        $ref: '#/components/requestBodies/SchedulleInput'
+  '/schedulles/{schedulleId}':
+    get:
+      summary: Find a schedulle by id
+      description: Find a schedulle by id
+      operationId: getSchedulle
+      responses:
+        '200':
+          $ref: '#/components/responses/SchedulleResult'
+        '404':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+    parameters:
+      - schema:
+          type: string
+        name: schedulleId
+        in: path
+        required: true
+    put:
+      summary: Update a schedulle by id
+      operationId: updateSchedulle
+      responses:
+        '200':
+          $ref: '#/components/responses/SchedulleResult'
+        '404':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+      requestBody:
+        $ref: '#/components/requestBodies/SchedulleInput'
+      description: Update a schedulle by id
+    delete:
+      summary: Delete a schedulle by id
+      operationId: deleteSchedulle
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+      description: Delete a schedulle by id
+  /sessions:
+    parameters: []
+    post:
+      summary: Open a vote session
+      operationId: openVoteSession
+      responses:
+        '201':
+          $ref: '#/components/responses/SessionResult'
+        '409':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+      description: Open a vote session
+      requestBody:
+        $ref: '#/components/requestBodies/SessionInput'
+      parameters: []
+  '/schedulles/{schedulleId}/results':
+    parameters:
+      - schema:
+          type: string
+        name: schedulleId
+        in: path
+        required: true
+    get:
+      summary: Get results of schedulle
+      operationId: getResults
+      description: Get results of schedulle
+      parameters: []
+      responses:
+        '200':
+          description: Result of schedulle
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResultOfSchedulleResult'
+        '404':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+  /votes:
+    get:
+      summary: Get all votes
+      operationId: getAllVotes
+      description: Get all votes
+      responses:
+        '200':
+          description: Votes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VoteResult'
+        '500':
+          $ref: '#/components/responses/Problem'
+    post:
+      summary: Create a new vote
+      operationId: createVote
+      responses:
+        '201':
+          $ref: '#/components/responses/VoteResult'
+        '404':
+          $ref: '#/components/responses/Problem'
+        '409':
+          $ref: '#/components/responses/Problem'
+        '500':
+          $ref: '#/components/responses/Problem'
+      description: Create a new vote
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/VoteInput'

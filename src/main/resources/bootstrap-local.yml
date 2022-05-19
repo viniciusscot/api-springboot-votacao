@@ -1,0 +1,14 @@
+mongo:
+  username: votacaoapp
+  password: votacao123
+  host: cluster0.ehkor.mongodb.net
+  database: votes
+  port: 27017
+
+SPRING_DATA_MONGODB_URI: mongodb+srv://${mongo.username}:${mongo.password}@${mongo.host}/${mongo.database}
+
+logging:
+  level:
+    root: INFO
+    com.cvccorp.attentions: INFO
+    org.springframework: WARN

@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: api-springboot-votacao
+  cloud:
+    config:
+      enabled: false
+
+server:
+  servlet:
+    context-path: /${spring.application.name}
