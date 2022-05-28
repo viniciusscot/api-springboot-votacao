@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: test
   application:
     name: api-springboot-votacao
   jackson:
@@ -7,8 +9,14 @@ spring:
   cloud:
     config:
       enabled: false
-  profiles:
-    active: test
+    consul:
+      enabled: false
+      config:
+        enabled: false
+    vault:
+      enabled: false
+      config:
+        enabled: false
 
 server:
   servlet:

@@ -28,7 +28,8 @@ public class CreateVoteUseCase {
                              GetAssociateByIdUseCase getAssociateByIdUseCase,
                              GetSessionBySchedulleIdAndStartDateAndEndDateUseCase getSessionBySchedulleIdAndStartDateAndEndDateUseCase,
                              GetSchedulleByIdUseCase getSchedulleByIdUseCase,
-                             FindVoteByAssociateIdAndSchedulleIdThenTrownUseCase findVoteByAssociateIdAndSchedulleIdThenTrownUseCase, VerifyCpfUseCase verifyCpfUseCase,
+                             FindVoteByAssociateIdAndSchedulleIdThenTrownUseCase findVoteByAssociateIdAndSchedulleIdThenTrownUseCase,
+                             VerifyCpfUseCase verifyCpfUseCase,
                              DateUtils dateUtils) {
         this.voteRepository = voteRepository;
         this.getAssociateByIdUseCase = getAssociateByIdUseCase;
@@ -45,12 +46,11 @@ public class CreateVoteUseCase {
         final var schedulle = this.getSchedulleByIdUseCase.execute(vote.getSchedulleId());
         final var session = this.getSessionBySchedulleIdAndStartDateAndEndDateUseCase.execute(schedulle.getId(), now);
 
+        if (Objects.isNull(session))
+            throw new SessionNotFoundException(schedulle.getId());
 
         vote.setHorary(now)
                 .setSessionId(session.getId());
-
-        if (Objects.isNull(session))
-            throw new SessionNotFoundException(schedulle.getId());
 
         this.findVoteByAssociateIdAndSchedulleIdThenTrownUseCase.execute(vote.getAssociateId(), schedulle.getId());
 

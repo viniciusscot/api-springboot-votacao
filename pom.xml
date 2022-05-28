@@ -11,7 +11,9 @@
 
     <properties>
         <java.version>11</java.version>
-        <sonar.coverage.exclusions>**/model/**,**/data/**,**/bootstrap/**,**/entities/**,**/properties/**,**/exceptions/**,**/Application.java</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>
+            **/model/**,**/data/**,**/bootstrap/**,**/entities/**,**/properties/**,**/exceptions/**,**/Application.java
+        </sonar.coverage.exclusions>
         <spring-fox.version>2.9.2</spring-fox.version>
     </properties>
 
@@ -138,6 +140,11 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-wiremock</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

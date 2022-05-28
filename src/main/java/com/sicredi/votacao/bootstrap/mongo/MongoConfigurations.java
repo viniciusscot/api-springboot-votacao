@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
+import org.springframework.util.SocketUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,18 +20,12 @@ public class MongoConfigurations extends AbstractMongoClientConfiguration {
 
     @Value("${mongo.database}")
     private String database;
-    @Value("${mongo.host}")
-    private String host;
-    @Value("${mongo.port}")
-    private String port;
-    @Value("${mongo.username}")
-    private String username;
-    @Value("${mongo.password}")
-    private String password;
+    @Value("${mongo.fullUrl}")
+    private String mongoSrv;
 
     @Override
     public MongoClient mongoClient() {
-        final ConnectionString connectionString = new ConnectionString(String.format("mongodb+srv://%s:%s@%s/%s", username, password, host, database));
+        final ConnectionString connectionString = new ConnectionString(mongoSrv);
         final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();

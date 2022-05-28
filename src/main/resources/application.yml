@@ -12,11 +12,11 @@ spring:
     restart:
       enabled: true
       additional-exclude: logs/**
-  jmx:
-    enabled: true
   data:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_URI}
+  jmx:
+    enabled: true
 
 management:
   context-path: /actuator

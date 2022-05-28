@@ -38,6 +38,6 @@ public class GetResultsOfSchedulleSessionVoteUseCase {
                 .setVotes(Long.valueOf(votes.size()))
                 .setVotesYes(votesYes)
                 .setVotesNo(votesNo)
-                .setResult(votesNo.equals(votesYes) ? "EMPATE" : votesNo > votesYes ? "NÃO" : "SIM");
+                .setResult(votesNo.equals(votesYes) ? "DRAW" : votesNo > votesYes ? "NO" : "YES");
     }
 }

@@ -34,14 +34,7 @@ public class SchedulleDataSource implements SchedulleRepository {
 
     @Override
     public void delete(final String schedulleId) {
-        try {
-            this.repository.deleteById(schedulleId);
-        } catch (EmptyResultDataAccessException e) {
-            throw new SchedulleNotFoundException(schedulleId);
-        } catch (DataIntegrityViolationException e) {
-            throw new EntityInUseException(
-                    String.format(MSG_SCHEDULLE_IN_USE, schedulleId));
-        }
+        this.repository.deleteById(schedulleId);
     }
 
     @Override

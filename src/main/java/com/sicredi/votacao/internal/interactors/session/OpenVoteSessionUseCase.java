@@ -29,13 +29,13 @@ public class OpenVoteSessionUseCase {
     }
 
     public Session execute(Session session) {
-        final var now = dateUtils.getDate();
+        final var now = this.dateUtils.getDate();
 
-        getSchedulleByIdUseCase.execute(session.getSchedulleId());
+        this.getSchedulleByIdUseCase.execute(session.getSchedulleId());
 
         session.setStartDate(now.toInstant()
                         .atOffset(ZoneOffset.UTC))
-                .setEndDate(dateUtils.addMinutesToDate(now, session.getDurationInMinutes())
+                .setEndDate(this.dateUtils.addMinutesToDate(now, session.getDurationInMinutes())
                         .toInstant()
                         .atOffset(ZoneOffset.UTC));
 

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPattern": "/users/invalid_cpf",
+    "headers": {
+      "Accept": {
+        "equalTo": "*/*"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  }
+}

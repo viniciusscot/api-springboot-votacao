@@ -1,0 +1,14 @@
+mongo:
+  host: localhost
+  database: votes
+  port: 27017
+  fullUrl: mongodb://${mongo.host}:${mongo.port}
+
+webservices:
+  host: http://localhost
+  port: 9000
+  url: ${webservices.host}:${webservices.port}
+
+services:
+  sicredi:
+    cpfGateway: ${webservices.url}
