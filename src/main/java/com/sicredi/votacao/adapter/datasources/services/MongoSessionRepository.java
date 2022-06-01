@@ -17,4 +17,6 @@ public interface MongoSessionRepository extends MongoRepository<SessionModel, St
 
     List<SessionModel> findAllBySchedulleId(String schedulleId);
 
+    List<SessionModel> findAllByFinishedAndAndEndDateLessThanEqual(Boolean finished, OffsetDateTime now);
+
 }

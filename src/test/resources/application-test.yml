@@ -12,3 +12,4 @@ webservices:
 services:
   sicredi:
     cpfGateway: ${webservices.url}
+    kafkaTopic: SESSION_FINISHED

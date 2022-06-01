@@ -4,6 +4,10 @@ spring:
   cloud:
     config:
       enabled: false
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      group-id: sicred
 
 server:
   servlet:

@@ -39,3 +39,4 @@ management:
 services:
   sicredi:
     cpfGateway: https://user-info.herokuapp.com
+    kafkaTopic: SESSION_FINISHED
