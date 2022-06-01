@@ -9,6 +9,16 @@ spring:
       auto-offset-reset: earliest
       group-id: sicred
 
+mongo:
+  username: votacaoapp
+  password: votacao123
+  host: cluster0.ehkor.mongodb.net
+  database: votes
+  port: 27017
+  fullUrl: mongodb+srv://${mongo.username}:${mongo.password}@${mongo.host}/${mongo.database}
+
+SPRING_DATA_MONGODB_URI: mongodb+srv://${mongo.username}:${mongo.password}@${mongo.host}/${mongo.database}
+
 server:
   servlet:
     context-path: /${spring.application.name}

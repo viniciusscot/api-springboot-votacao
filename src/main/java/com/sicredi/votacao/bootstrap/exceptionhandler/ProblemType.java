@@ -1,4 +1,4 @@
-package com.sicredi.votacao.bootstrap.exceptionHandler;
+package com.sicredi.votacao.bootstrap.exceptionhandler;
 
 
 public enum ProblemType {

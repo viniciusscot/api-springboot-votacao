@@ -1,10 +1,11 @@
-package com.sicredi.votacao.bootstrap.exceptionHandler;
+package com.sicredi.votacao.bootstrap.exceptionhandler;
 
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.sicredi.votacao.bootstrap.exceptions.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -39,9 +41,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         this.messageSource = messageSource;
     }
 
+    @NotNull
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
+                                                                  @NotNull HttpHeaders headers, @NotNull HttpStatus status, @NotNull WebRequest request) {
 
         ProblemType problemType = ProblemType.INVALID_DATA;
         String detail = "One or more fields are invalid. Please fill in correctly and try again.";
@@ -77,17 +80,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemType problemType = ProblemType.SYSTEM_ERROR;
         String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
 
-        ex.printStackTrace();
-
         Problem problem = createProblem(status, problemType, detail)
                 .setUserMessage(detail);
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
+    @NotNull
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex,
-                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
+                                                                   @NotNull HttpHeaders headers, @NotNull HttpStatus status, @NotNull WebRequest request) {
 
         ProblemType problemType = ProblemType.RESOURCE_NOT_FOUND;
         String detail = String.format("The resource %s you tried to access is non-existent.",
@@ -99,9 +101,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
+    @NotNull
     @Override
-    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
-                                                        HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleTypeMismatch(@NotNull TypeMismatchException ex, @NotNull HttpHeaders headers,
+                                                        @NotNull HttpStatus status, @NotNull WebRequest request) {
 
         if (ex instanceof MethodArgumentTypeMismatchException) {
             return handleMethodArgumentTypeMismatch(
@@ -119,7 +122,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         String detail = String.format("The URL parameter '%s' received the value '%s',"
                         + "which is of an invalid type. Correct and enter a value compatible with type %s.",
-                ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
+                ex.getName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName());
 
         Problem problem = createProblem(status, problemType, detail)
                 .setUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL);
@@ -127,9 +130,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
+    @NotNull
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(@NotNull HttpMessageNotReadableException ex,
+                                                                  @NotNull HttpHeaders headers, @NotNull HttpStatus status, @NotNull WebRequest request) {
         Throwable rootCause = ExceptionUtils.getRootCause(ex);
 
         if (rootCause instanceof InvalidFormatException) {
@@ -179,8 +183,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<?> handleEntityNotFound(EntityNotFoundException ex,
-                                                  WebRequest request) {
+    public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex,
+                                                       WebRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
         ProblemType problemType = ProblemType.RESOURCE_NOT_FOUND;
@@ -193,7 +197,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EntityInUseException.class)
-    public ResponseEntity<?> handleEntityInUse(EntityInUseException ex, WebRequest request) {
+    public ResponseEntity<Object> handleEntityInUse(EntityInUseException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.CONFLICT;
         ProblemType problemType = ProblemType.ENTITY_IN_USE;
@@ -206,7 +210,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(VoteAlreadyComputedException.class)
-    public ResponseEntity<?> handleVoteAlreadyComputed(VoteAlreadyComputedException ex, WebRequest request) {
+    public ResponseEntity<Object> handleVoteAlreadyComputed(VoteAlreadyComputedException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.CONFLICT;
         ProblemType problemType = ProblemType.VOTE_ALREADY_COMPUTED;
@@ -219,7 +223,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(VoteNotAuthorizedException.class)
-    public ResponseEntity<?> handleVoteNotAuthorized(VoteNotAuthorizedException ex, WebRequest request) {
+    public ResponseEntity<Object> handleVoteNotAuthorized(VoteNotAuthorizedException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.CONFLICT;
         ProblemType problemType = ProblemType.VOTE_NOT_AUTHORIZED;
@@ -232,7 +236,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<?> handleBusiness(BusinessException ex, WebRequest request) {
+    public ResponseEntity<Object> handleBusiness(BusinessException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ProblemType problemType = ProblemType.BUSINESS_ERROR;
@@ -244,9 +248,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
+    @NotNull
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-                                                             HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(@NotNull Exception ex, Object body, @NotNull HttpHeaders headers,
+                                                             @NotNull HttpStatus status, @NotNull WebRequest request) {
 
         if (body == null) {
             body = new Problem()
@@ -277,7 +282,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private String joinPath(List<Reference> references) {
         return references.stream()
-                .map(ref -> ref.getFieldName())
+                .map(Reference::getFieldName)
                 .collect(Collectors.joining("."));
     }
 

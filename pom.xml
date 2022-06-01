@@ -12,7 +12,7 @@
     <properties>
         <java.version>11</java.version>
         <sonar.coverage.exclusions>
-            **/model/**,**/data/**,**/bootstrap/**,**/entities/**,**/properties/**,**/exceptions/**,**/Application.java
+            **/model/**,**/data/**,**/bootstrap/**,**/entities/**,**/properties/**,**/exceptions/**,**/Application.java,**/ApiExceptionHandler.java
         </sonar.coverage.exclusions>
         <spring-fox.version>2.9.2</spring-fox.version>
     </properties>
